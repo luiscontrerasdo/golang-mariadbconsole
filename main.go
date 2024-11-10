@@ -11,14 +11,20 @@ import (
 	"strings"
 	"time"
 
+// Import the gopsutil package for CPU usage statistics
 	"github.com/shirou/gopsutil/cpu"
+// Import the gopsutil package for Disk usage statistics
 	"github.com/shirou/gopsutil/disk"
+// Import the gopsutil package for Memory usage statistics
 	"github.com/shirou/gopsutil/mem"
+// Import termui package to build terminal UI for application display
 	ui "github.com/gizak/termui/v3"
+// Import termui package to build terminal UI for application display
 	"github.com/gizak/termui/v3/widgets"
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Global variable declarations to store application state and metrics
 var (
 	db                   *sql.DB
 	connectionCount      int
@@ -41,10 +47,15 @@ var (
 	topOperations        string
 )
 
+// main function initializes the application, parses flags, and begins setup
 func main() {
+// Define flags for user inputs such as database credentials and host information
 	user := flag.String("user", "", "Database user")
+// Define flags for user inputs such as database credentials and host information
 	password := flag.String("password", "", "Database password")
+// Define flags for user inputs such as database credentials and host information
 	host := flag.String("host", "localhost", "Database host")
+// Define flags for user inputs such as database credentials and host information
 	database := flag.String("database", "", "Database name")
 	flag.Parse()
 
@@ -60,6 +71,7 @@ func main() {
 	drawUI()
 }
 
+// connectDB function: Add a brief explanation of what this function does
 func connectDB(user, password, host, database string) {
 	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s", user, password, host, database)
@@ -74,6 +86,7 @@ func connectDB(user, password, host, database string) {
 	log.Println("Database connection successfully established")
 }
 
+// collectMetrics function: Add a brief explanation of what this function does
 func collectMetrics() {
 	for {
 		cpuPercents, _ := cpu.Percent(0, false)
@@ -126,6 +139,7 @@ func collectMetrics() {
 	}
 }
 
+// getLocalIP function: Add a brief explanation of what this function does
 func getLocalIP() (string, error) {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
@@ -141,6 +155,7 @@ func getLocalIP() (string, error) {
 	return "", fmt.Errorf("could not determine local IP address")
 }
 
+// getLargestBinlogs function: Add a brief explanation of what this function does
 func getLargestBinlogs(limit int) (string, error) {
 	rows, err := db.Query("SHOW BINARY LOGS")
 	if err != nil {
@@ -179,6 +194,7 @@ func getLargestBinlogs(limit int) (string, error) {
 	return result, nil
 }
 
+// getDatabaseAndTableCounts function: Add a brief explanation of what this function does
 func getDatabaseAndTableCounts() (string, string, error) {
 	var dbCount int
 	tableCounts := ""
@@ -227,6 +243,7 @@ func getDatabaseAndTableCounts() (string, string, error) {
 	return fmt.Sprintf("Total DBs: %d", dbCount), strings.TrimSpace(tableCounts), nil
 }
 
+// getTopSlowQueries function: Add a brief explanation of what this function does
 func getTopSlowQueries() (string, error) {
 	rows, err := db.Query(`
 		SELECT id, user, time 
@@ -253,6 +270,7 @@ func getTopSlowQueries() (string, error) {
 	return result, nil
 }
 
+// getQueryCounts function: Add a brief explanation of what this function does
 func getQueryCounts() (string, error) {
 	db.QueryRow("SHOW GLOBAL STATUS LIKE 'Com_select'").Scan(new(string), &selectCount)
 	db.QueryRow("SHOW GLOBAL STATUS LIKE 'Com_insert'").Scan(new(string), &insertCount)
@@ -263,6 +281,7 @@ func getQueryCounts() (string, error) {
 }
 
 // Función para obtener el top 5 de operaciones más lentas
+// getTopOperations function: Add a brief explanation of what this function does
 func getTopOperations() (string, error) {
 	rows, err := db.Query(`
 		SELECT id, command, time, info
@@ -292,6 +311,7 @@ func getTopOperations() (string, error) {
 }
 
 // Extraer el nombre de la tabla de la consulta SQL
+// extractTableName function: Add a brief explanation of what this function does
 func extractTableName(query string) string {
 	words := strings.Fields(query)
 	for i, word := range words {
@@ -305,6 +325,7 @@ func extractTableName(query string) string {
 }
 
 // Función drawUI con todos los cuadros de métricas configurados en sus posiciones
+// drawUI function: Add a brief explanation of what this function does
 func drawUI() {
 	if err := ui.Init(); err != nil {
 		log.Fatalf("Failed to initialize UI: %v", err)
