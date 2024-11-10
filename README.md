@@ -2,11 +2,14 @@
 
 Usage:
 
-  -database string
-        Database name
-  -host string
-        Database host (default "localhost")
-  -password string
-        Database password
-  -user string
-        Database user
+-database string
+Database name
+
+-host string
+Database host (default "localhost")
+
+-password string
+Database password
+
+-user string
+Database user
