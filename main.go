@@ -1,3 +1,7 @@
+// Create by Luis Contreras
+// Email: luis.contreras.do@gmail.com
+// November 11th, 2024
+
 package main
 
 import (
