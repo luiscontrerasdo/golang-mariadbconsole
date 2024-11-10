@@ -13,3 +13,5 @@ Database password
 
 -user string
 Database user
+
+The q.sql file is for testing, it will create databases, tables and execute queries, inserts, updates and deletes.
