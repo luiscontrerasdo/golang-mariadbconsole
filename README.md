@@ -1,6 +1,6 @@
 # Console in Golang for MariaDB / MYSQL
 
-Usage:
+##Usage:
 
 -database string
 Database name
